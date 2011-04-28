@@ -1,0 +1,11 @@
+C:\Users\sty\Desktop\Release\CSBrowserHelperObject.dll
+C:\Users\sty\Desktop\Release\CSBrowserHelperObject.pdb
+C:\Users\sty\Desktop\CSBrowserHelperObject\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Users\sty\Desktop\CSBrowserHelperObject\obj\x86\Release\Interop.SHDocVw.dll
+C:\Users\sty\Desktop\CSBrowserHelperObject\obj\x86\Release\CSBrowserHelperObject.csproj.ResolveComReference.cache
+C:\Users\sty\Desktop\CSBrowserHelperObject\obj\x86\Release\CSBrowserHelperObject.dll
+C:\Users\sty\Desktop\CSBrowserHelperObject\obj\x86\Release\CSBrowserHelperObject.pdb
+C:\Users\sty\Desktop\Release\CSBrowserHelperObject.tlb
+C:\Users\sty\Desktop\CSBrowserHelperObject\Release\CSBrowserHelperObject.dll
+C:\Users\sty\Desktop\CSBrowserHelperObject\Release\CSBrowserHelperObject.pdb
+C:\Users\sty\Desktop\CSBrowserHelperObject\Release\CSBrowserHelperObject.tlb
