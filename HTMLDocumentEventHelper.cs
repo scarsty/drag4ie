@@ -23,8 +23,9 @@ using SHDocVw;
 using mshtml;
 using System;
 using System.Windows.Forms;
+using System.Threading;
 
-namespace CSBrowserHelperObject
+namespace CSBHODragForIE9
 {
     [ComVisible(true)]
 
@@ -91,15 +92,15 @@ namespace CSBrowserHelperObject
 
     public class HTMLDocumentEventHelper
     {
-        private IHTMLDocument3 document;
+        private IHTMLDocument2 document;
         private InternetExplorer ieInstance;
 
         public HTMLDocumentEventHelper(IHTMLDocument3 document, InternetExplorer ieInstance)
         {
-            this.document = document as IHTMLDocument3;
+            this.document = document as IHTMLDocument2;
             this.ieInstance = ieInstance;
-            
-            this.ondragstart += e => e.returnValue = true;
+
+            this.ondragstart += e => e.returnValue = false;
             var rootElementEvents = document.documentElement as HTMLElementEvents_Event;
             rootElementEvents.ondragover += () => false;
             rootElementEvents.ondrop += () => { SuperDragDrop(); return false; };
@@ -108,16 +109,19 @@ namespace CSBrowserHelperObject
 
         public void SuperDragDrop()
         {
-
-            var doc1 = document as HTMLDocument;
-            var eventObj = doc1.parentWindow.@event as IHTMLEventObj2;
-
+            
+            //var doc1 = document as HTMLDocument;
+            //Thread.Sleep(100);
+            //MessageBox.Show("ddd");
+            //var eventObj = doc1.parentWindow.@event as IHTMLEventObj2;
+            var eventObj = document.parentWindow.@event as IHTMLEventObj2;
+            
             //拖拽的是链接，在新窗口中打开链接
             var url = (object)eventObj.dataTransfer.getData("URL") as string;
-            
+            //MessageBox.Show(url);
             if (!string.IsNullOrEmpty(url))
             {
-                                 
+                //MessageBox.Show(url);                 
                 ieInstance.Navigate2(url, BrowserNavConstants.navOpenInBackgroundTab);
                 
                 return;
@@ -142,13 +146,31 @@ namespace CSBrowserHelperObject
 
         public event HtmlEvent ondragstart
         {            
+            
             add
             {
+                
 
+                object existingHandler = document.ondragstart;
+                HTMLEventHandler handler = existingHandler as HTMLEventHandler;
+
+                // Set the handler to the oncontextmenu event.
+                //dispDoc.ondragstart = handler;
+
+                if (handler != null) 
+                    handler.eventHandler += value;
             }
             remove
             {
+                //MessageBox.Show("remove");
+                DispHTMLDocument dispDoc = this.document as DispHTMLDocument;
+                object existingHandler = dispDoc.ondragstart;
 
+                HTMLEventHandler handler = existingHandler is HTMLEventHandler ?
+                    existingHandler as HTMLEventHandler : null;
+
+                if (handler != null)
+                    handler.eventHandler -= value;
             }
         }
 
