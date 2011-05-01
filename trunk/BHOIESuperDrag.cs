@@ -35,7 +35,7 @@ using mshtml;
 using System.Windows.Forms;
 
 
-namespace CSBrowserHelperObject
+namespace CSBHODragForIE9
 {
     /// <summary>
     /// Set the GUID of this class and specify that this class is ComVisible.
@@ -43,15 +43,18 @@ namespace CSBrowserHelperObject
     /// </summary>
     [ComVisible(true),
     ClassInterface(ClassInterfaceType.None),
-   Guid("C42D40F0-BEBF-418D-8EA1-18D99AC2AB17")]
+   Guid("c963e2da-e71f-4dbe-9fcd-f252075b0aa7")]
     public class BHOIESuperDrag : IObjectWithSite
     {
         // Current IE instance. For IE7 or later version, an IE Tab is just 
         // an IE instance.
         public InternetExplorer ieInstance;
 
-        public int Count = 0;
-        public bool SetHandlered = false;
+        public bool SetHandlered = true, DocumentLoaded = false, Navigated = false, Refreshed = false, NewPage = false;
+        public DateTime timer = DateTime.Now.AddDays(-1), timerPreSet = DateTime.Now.AddDays(-1),
+            timerPreNav = DateTime.Now.AddDays(-1), timerPreRef = DateTime.Now.AddDays(-1);
+        //public HTMLDocumentEventHelper helper;
+        public string urlPreNavigate = "";
 
         // To register a BHO, a new key should be created under this key.
         private const string BHORegistryKey =
@@ -79,7 +82,7 @@ namespace CSBrowserHelperObject
             // 32 digits separated by hyphens, enclosed in braces: 
             // {00000000-0000-0000-0000-000000000000}
             string bhoKeyStr = t.GUID.ToString("B");
-            
+
             RegistryKey bhoKey = key.OpenSubKey(bhoKeyStr, true);
 
             // Create a new key.
@@ -127,8 +130,11 @@ namespace CSBrowserHelperObject
 
                 // Register the DocumentComplete event.
 
-                SetHandlered = false;
-                ieInstance.NavigateComplete2 += 
+                //SetHandlered = false;
+                ieInstance.BeforeNavigate2 +=
+                    new DWebBrowserEvents2_BeforeNavigate2EventHandler(
+                        ieInstance_BeforeNavigate2);
+                ieInstance.NavigateComplete2 +=
                     new DWebBrowserEvents2_NavigateComplete2EventHandler(
                         ieInstance_NavigateComplete2);
                 ieInstance.DocumentComplete +=
@@ -136,10 +142,15 @@ namespace CSBrowserHelperObject
                         ieInstance_DocumentComplete);
                 ieInstance.DownloadComplete +=
                     new DWebBrowserEvents2_DownloadCompleteEventHandler(
-                        ieInstance_DownloadBegin);
+                        ieInstance_DownloadComplete);
                 ieInstance.DownloadBegin +=
                     new DWebBrowserEvents2_DownloadBeginEventHandler(
                         ieInstance_DownloadBegin);
+                //ieInstance.ProgressChange +=
+                //new DWebBrowserEvents2_ProgressChangeEventHandler(
+                //ieInstance_ProgressChange);
+
+
             }
         }
 
@@ -172,97 +183,168 @@ namespace CSBrowserHelperObject
         /// </param>
         void ieInstance_NavigateComplete2(object pDisp, ref object URL)
         {
-            SetHandlered = false;
-            Count++;
 
-            //MessageBox.Show("Nav");
-            string url = URL as string;
+            Navigated = true;
+            //MessageBox.Show("navigate"+URL.ToString());
 
-            if (string.IsNullOrEmpty(url) 
-                || url.Equals("about:blank", StringComparison.OrdinalIgnoreCase))
+            if (pDisp == ieInstance)
             {
-                return;
+                //MessageBox.Show("main navigate"+URL.ToString());
+                if ((urlPreNavigate != URL.ToString()) ||
+                    (PassedMilliseconds(timerPreNav) > 5000) && ((urlPreNavigate == URL.ToString())))
+                {
+                    //if (Refreshed == false)
+
+                    //MessageBox.Show("navigate");
+                    if (PassedMilliseconds(timerPreRef) > 1000)
+                    {
+                        NewPage = true;
+                        TrySetHandler();
+                        //MessageBox.Show("navigate and set 1");
+                        timerPreNav = DateTime.Now;
+                    }
+                    else
+                    {
+                        if (NewPage == true)
+                        {
+                            TrySetHandler();
+                            //MessageBox.Show("navigate and set 2");
+                        }
+                    }
+
+                }
+
+
+                urlPreNavigate = URL as string;
+                DocumentLoaded = false;
             }
 
-            InternetExplorer explorer = pDisp as InternetExplorer;
-            
-            // Set the handler of the document in InternetExplorer.
+            //timer = DateTime.Now;
 
-            if (explorer != null)
-            {
-                SetHandler(explorer);
-            }
         }
+
 
         void ieInstance_DocumentComplete(object pDisp, ref object URL)
-        {            
-            SetHandlered = false;
-            Count--;
-            //MessageBox.Show("Document Complete");
+        {
+
+            if (pDisp == ieInstance)
+            {
+                DocumentLoaded = true;
+
+                //MessageBox.Show("docuemnt complete" + URL.ToString());
+
+
+                //if (Navigated == false)
+                {
+                    //NewPage = true;
+                    //TrySetHandler();
+                }
+
+                //if (Navigated == true)
+                    //Navigated = false;
+                Refreshed = false;
+
+                timerPreNav = DateTime.Now;
+                urlPreNavigate = URL as string;
+
+            }
+
+            timer = DateTime.Now;
+            
         }
+
 
         void ieInstance_DownloadBegin()
         {
 
-            //MessageBox.Show(Count.ToString());
-            if (Count == 0)
+            if (PassedMilliseconds(timer) > 5000)
+            {
+                //MessageBox.Show("refresh");
+
+                if (PassedMilliseconds(timerPreNav) > 1000)
+                {
+                    NewPage = true;
+                    object purl = urlPreNavigate;
+                    //ieInstance_NavigateComplete2(ieInstance, ref purl);
+                    //MessageBox.Show("refresh real");
+                }
+            }
+
+        }
+
+
+        void ieInstance_DownloadComplete()
+        {
+
+            /*if (NewPage)
+            {
+                TrySetHandler();
+                //MessageBox.Show("Download Complete and set");
+
+            }*/
+            timer = DateTime.Now;
+
+        }
+
+
+        void ieInstance_BeforeNavigate2(object pDisp, ref object URL, ref object Flags,
+            ref object TargetFrameName, ref object PostData, ref object Headers, ref bool Cancel)
+        {
+            Navigated = true;
+        }
+
+
+        void TrySetHandler()
+        {
+            if (NewPage && PassedMilliseconds(timerPreSet)>2000)
             {
                 if (ieInstance != null)
                 {
                     SetHandler(ieInstance);
                 }
-            }
-            
-            //MessageBox.Show("dowB");
-        }
-
-        void ieInstance_DownloadComplete()
-        {
-
-            //MessageBox.Show("DowC");
-            
-        }
-
-        /*void ieInstance_BeforeNavigate2(object pDisp, ref object URL, ref object Flags,
-            ref object TargetFrameName, ref object PostData, ref object Headers, ref bool Cancel)
-        {
-            string url = URL as string;
-
-            if (string.IsNullOrEmpty(url)
-                || url.Equals("about:blank", StringComparison.OrdinalIgnoreCase))
-            {
-                return;
+                timerPreSet = DateTime.Now;
+                NewPage = false;
             }
 
-            InternetExplorer explorer = pDisp as InternetExplorer;
 
-            // Set the handler of the document in InternetExplorer.
-            if (explorer != null)
+        }
+
+        double PassedMilliseconds(DateTime d)
+        {
+            TimeSpan s = DateTime.Now - d;
+            return s.TotalMilliseconds;
+        }
+
+        /*void ieInstance_ProgressChange(int Progress, int ProgressMax)
+        {
+            if (DownloadBegined == false && isRefresh == false && Progress < ProgressMax && Progress > 0)
             {
-                SetHandler(explorer);
+                isRefresh = true;
+                MessageBox.Show(Progress.ToString() + "might in refresh" + DownloadBegined.ToString() + isRefresh.ToString());
+
+            }
+            if (DownloadBegined == false && isRefresh == true && Progress == -1)
+            {
+                isRefresh = false;
             }
         }*/
 
 
         void SetHandler(InternetExplorer explorer)
         {
-            
-            if (SetHandlered == false) 
+            try
             {
-                try
-                {
+                // Register the oncontextmenu event of the  document in InternetExplorer.
+                //MessageBox.Show("set");
+                HTMLDocumentEventHelper helper =
+                   new HTMLDocumentEventHelper(ieInstance.Document as IHTMLDocument3, explorer);
+                helper.ondragstart += new HtmlEvent(ondragstartHandler);
 
-                    // Register the oncontextmenu event of the  document in InternetExplorer.
-
-
-                    HTMLDocumentEventHelper helper =
-                        new HTMLDocumentEventHelper(this.ieInstance.Document as IHTMLDocument3, explorer);
-                    helper.ondragstart += new HtmlEvent(ondragstartHandler);
-                    SetHandlered = true;
-                }
-                catch { }
+                //helper.ondragstart -= new HtmlEvent(ondragstartHandler);
+                //SetHandlered = true;
+                //CommandSet = false;
             }
-
+            catch { }
         }
 
         /// <summary>

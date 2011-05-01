@@ -18,7 +18,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace CSBrowserHelperObject
+namespace CSBHODragForIE9
 {
     [ComImport]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
