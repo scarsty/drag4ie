@@ -55,6 +55,8 @@ namespace CSBHODragForIE9
             timerPreNav = DateTime.Now.AddDays(-1), timerPreRef = DateTime.Now.AddDays(-1);
         //public HTMLDocumentEventHelper helper;
         public string urlPreNavigate = "";
+        public IHTMLDocument3 document;
+        public HTMLElementEvents2_Event rootElementEvents;
 
         // To register a BHO, a new key should be created under this key.
         private const string BHORegistryKey =
@@ -128,15 +130,16 @@ namespace CSBHODragForIE9
             {
                 ieInstance = (InternetExplorer)site;
 
-                // Register the DocumentComplete event.
 
-                //SetHandlered = false;
                 ieInstance.BeforeNavigate2 +=
                     new DWebBrowserEvents2_BeforeNavigate2EventHandler(
                         ieInstance_BeforeNavigate2);
                 ieInstance.NavigateComplete2 +=
                     new DWebBrowserEvents2_NavigateComplete2EventHandler(
                         ieInstance_NavigateComplete2);
+                ieInstance.DocumentComplete -=
+                    new DWebBrowserEvents2_DocumentCompleteEventHandler(
+                        ieInstance_DocumentComplete);
                 ieInstance.DocumentComplete +=
                     new DWebBrowserEvents2_DocumentCompleteEventHandler(
                         ieInstance_DocumentComplete);
@@ -146,6 +149,24 @@ namespace CSBHODragForIE9
                 ieInstance.DownloadBegin +=
                     new DWebBrowserEvents2_DownloadBeginEventHandler(
                         ieInstance_DownloadBegin);
+
+
+                //document = ieInstance.Document as IHTMLDocument3;
+
+                //var rootElementEvents = document.documentElement as HTMLElementEvents_Event;
+
+                /*rootElementEvents.ondragstart += 
+                    new HTMLElementEvents2_ondragstartEventHandler(
+                        Events_Ondragstart);
+                //rootElementEvents.ondragover += () => false;
+                rootElementEvents.ondrop +=
+                    new HTMLElementEvents_ondropEventHandler(
+                        Events_Ondrop);*/
+                document = ieInstance.Document as IHTMLDocument3;
+                rootElementEvents = document.documentElement as HTMLElementEvents2_Event;
+                rootElementEvents.oncopy +=
+                    new HTMLElementEvents2_oncopyEventHandler(
+                        Events_Oncopy);
                 //ieInstance.ProgressChange +=
                 //new DWebBrowserEvents2_ProgressChangeEventHandler(
                 //ieInstance_ProgressChange);
@@ -189,6 +210,19 @@ namespace CSBHODragForIE9
 
             if (pDisp == ieInstance)
             {
+                //MessageBox.Show(Events_Ondrop(null).ToString());
+                document = ieInstance.Document as IHTMLDocument3;
+                rootElementEvents = document.documentElement as HTMLElementEvents2_Event;
+                rootElementEvents.ondragstart +=
+                    new HTMLElementEvents2_ondragstartEventHandler(
+                        Events_Ondragstart);
+                rootElementEvents.ondragover += (e) => false;
+                rootElementEvents.ondragend +=
+                    new HTMLElementEvents2_ondragendEventHandler(
+                        Events_Ondragend);
+                rootElementEvents.ondrop +=
+                    new HTMLElementEvents2_ondropEventHandler(
+                        Events_Ondrop);
                 //MessageBox.Show("main navigate"+URL.ToString());
                 if ((urlPreNavigate != URL.ToString()) ||
                     (PassedMilliseconds(timerPreNav) > 5000) && ((urlPreNavigate == URL.ToString())))
@@ -241,7 +275,7 @@ namespace CSBHODragForIE9
                 }
 
                 //if (Navigated == true)
-                    //Navigated = false;
+                //Navigated = false;
                 Refreshed = false;
 
                 timerPreNav = DateTime.Now;
@@ -250,12 +284,31 @@ namespace CSBHODragForIE9
             }
 
             timer = DateTime.Now;
-            
+
+        }
+
+        void ieInstance_DocumentComplete2(object pDisp, ref object URL)
+        {
+            MessageBox.Show("^");
         }
 
 
         void ieInstance_DownloadBegin()
         {
+
+            rootElementEvents = document.documentElement as HTMLElementEvents2_Event;
+            rootElementEvents.ondragstart +=
+                new HTMLElementEvents2_ondragstartEventHandler(
+                    Events_Ondragstart);
+            rootElementEvents.ondragover += (e) => false;
+            rootElementEvents.ondragend -=
+                new HTMLElementEvents2_ondragendEventHandler(
+                    Events_Ondragend); 
+            rootElementEvents.ondragend +=
+             new HTMLElementEvents2_ondragendEventHandler(
+                     Events_Ondragend);
+            
+            
 
             if (PassedMilliseconds(timer) > 5000)
             {
@@ -296,7 +349,7 @@ namespace CSBHODragForIE9
 
         void TrySetHandler()
         {
-            if (NewPage && PassedMilliseconds(timerPreSet)>2000)
+            if (NewPage && PassedMilliseconds(timerPreSet) > 2000)
             {
                 if (ieInstance != null)
                 {
@@ -336,9 +389,14 @@ namespace CSBHODragForIE9
             {
                 // Register the oncontextmenu event of the  document in InternetExplorer.
                 //MessageBox.Show("set");
-                HTMLDocumentEventHelper helper =
-                   new HTMLDocumentEventHelper(ieInstance.Document as IHTMLDocument3, explorer);
-                helper.ondragstart += new HtmlEvent(ondragstartHandler);
+                //HTMLDocumentEventHelper helper =
+                //new HTMLDocumentEventHelper(ieInstance.Document as IHTMLDocument3, explorer);
+                //helper.ondragstart += new HtmlEvent(ondragstartHandler);
+                //var document = ieInstance.Document as IHTMLDocument3;
+                //var rootElementEvents = document.documentElement as HTMLElementEvents_Event;
+                //rootElementEvents.ondragstart += new HtmlEvent(ondragstartHandler); //() => false;
+                //rootElementEvents.ondragover += () => false;
+                //rootElementEvents.ondrop += () => { SuperDragDrop(); return false; };
 
                 //helper.ondragstart -= new HtmlEvent(ondragstartHandler);
                 //SetHandlered = true;
@@ -351,13 +409,69 @@ namespace CSBHODragForIE9
         /// Handle the oncontextmenu event.
         /// </summary>
         /// <param name="e"></param>
-        void ondragstartHandler(IHTMLEventObj e)
+        bool Events_Ondragstart(IHTMLEventObj e)
         {
 
             // To cancel the default behavior, set the returnValue property of the event
             // object to false.
-            e.returnValue = false;
+            //this.ondragstartHandler += e => e.returnValue = false;
+            //MessageBox.Show("dd");
+            return true;
 
+        }
+
+        bool Events_Ondrop(IHTMLEventObj e)
+        {
+
+            return false;
+        }
+
+        void Events_Ondragend(IHTMLEventObj e)
+        {
+            superdrog();
+        }
+
+        bool Events_Oncopy(IHTMLEventObj e)
+        {
+            //MessageBox.Show(e.ToString());
+            return false;
+        }
+
+        #endregion
+
+        #region
+
+        void superdrog()
+        {
+            var doc1 = ieInstance.Document as IHTMLDocument2;
+            var eventObj = doc1.parentWindow.@event as IHTMLEventObj2;
+
+            //拖拽的是链接，在新窗口中打开链接
+            var url = (object)eventObj.dataTransfer.getData("URL") as string;
+            //MessageBox.Show(url);
+            if (!string.IsNullOrEmpty(url))
+            {
+                //MessageBox.Show(url);                 
+                ieInstance.Navigate2(url, BrowserNavConstants.navOpenInBackgroundTab);
+
+                return;
+            }
+
+            //拖拽的是选择的文本，则用google搜索该文本
+            var text = (object)eventObj.dataTransfer.getData("TEXT") as string;
+            if (!string.IsNullOrEmpty(text))
+            {
+                if (text.StartsWith("http://", System.StringComparison.OrdinalIgnoreCase))    //未被识别的超链接
+                {
+                    ieInstance.Navigate2(text, BrowserNavConstants.navOpenInBackgroundTab);
+                }
+                else    //待搜索的文本
+                {
+                    ieInstance.Navigate2(string.Format("http://www.google.com.hk/search?hl=zh-CN&q={0}", text), BrowserNavConstants.navOpenInBackgroundTab);
+                }
+                return;
+            }
+            return;
         }
 
         #endregion
