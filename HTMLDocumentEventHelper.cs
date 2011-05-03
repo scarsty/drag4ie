@@ -102,18 +102,14 @@ namespace CSBHODragForIE9
 
             this.ondragstart += e => e.returnValue = false;
             var rootElementEvents = document.documentElement as HTMLElementEvents_Event;
+            //rootElementEvents.ondragstart += ()=>false;
             rootElementEvents.ondragover += () => false;
-            rootElementEvents.ondrop += () => { SuperDragDrop(); return false; };
+            rootElementEvents.ondrop += () => { SuperDragDrop(); return false; };            
 
         }
 
         public void SuperDragDrop()
         {
-            
-            //var doc1 = document as HTMLDocument;
-            //Thread.Sleep(100);
-            //MessageBox.Show("ddd");
-            //var eventObj = doc1.parentWindow.@event as IHTMLEventObj2;
             var eventObj = document.parentWindow.@event as IHTMLEventObj2;
             
             //拖拽的是链接，在新窗口中打开链接
