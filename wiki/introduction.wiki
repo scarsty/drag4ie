@@ -1,0 +1,48 @@
+Super Drag and Go (Beta) for IE9
+超级拖拽(beta) for IE 9
+
+Author: s.weyl
+Version: 0.9.2.1 (beta)
+
+
+If you know what "Super Drag and Go" is, you might need it. For more information or source code, please contact with me by e-mail (scarsty@gmail.com).
+
+
+1. How to install and uninstall:
+
+First of all, please make sure you have .NET Framework 4.0 Client. You can get it from http://www.microsoft.com/downloads/en/details.aspx?FamilyID=e5ad0459-cbcc-4b4f-97b6-fb17111cf544.
+
+As Microsoft tell us, the full framework is a superset of the Client Profile. So .NET Framework 4.0 should be also good.
+
+Manually:
+
+To install, you have to decompress the ZIP file into any directory, then open "Command Window" as Administrator, and switch to this directory, run "install".
+
+Similarly, to uninstall, just do the same but run "uninstall".
+
+If you want to use it in 64 bit IE, please run "install 64" and "uninstall 64".
+
+You can also use "CustomDrag.exe" to modify the behavior of this BHO, or add a link of this program into IE tools menu. All settings will be deleted when uninstall.
+
+Automatically:
+
+Also you can use the msi file to install it automatically, but now it only supports 32 bit IE. Then you have to use "Control Panel" to uninstall it.
+
+Hope you can like it.
+
+
+2. The "Search string":
+
+Please search "{0}" in the engineering you prefer, then just copy the string in the address bar.
+
+
+3. References:
+
+http://www.cnblogs.com/TianFang/archive/2011/03/12/1982100.html
+http://www.codeproject.com/KB/cs/Issuewithbandobjects.aspx
+Contents on MSDN.
+And so on, many thanks to them.
+
+Seek setup files in:
+http://code.google.com/p/cs-drag4ie9/downloads/list
+
