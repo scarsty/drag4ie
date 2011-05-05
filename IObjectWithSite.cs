@@ -18,7 +18,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace CSBHODragForIE9
+namespace BHOForIE9
 {
     [ComImport]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]

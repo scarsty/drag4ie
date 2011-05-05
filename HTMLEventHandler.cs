@@ -19,7 +19,7 @@
 
 using System.Runtime.InteropServices;
 
-namespace CSBHODragForIE9
+namespace BHOForIE9
 {
 
     // The delegate of the handler method.
