@@ -34,9 +34,13 @@ Please search "{0}" in the engineering you prefer, then just copy the string in 
 3. References:
 
 http://www.cnblogs.com/TianFang/archive/2011/03/12/1982100.html
+
 http://www.codeproject.com/KB/cs/Issuewithbandobjects.aspx
+
 Contents on MSDN.
+
 And so on, many thanks to them.
+
 
 Seek setup files in:
 http://code.google.com/p/cs-drag4ie9/downloads/list
