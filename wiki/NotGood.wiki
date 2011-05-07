@@ -1,5 +1,48 @@
-I have to set handler many times  in "DownloadBegin" to make sure the handler is effective, whenever navigating, refreshing, refreshing when navigating (hope you can understand what I mean) and so on.
+Hi all,
 
-A new tab have to be re-navigated to let the handler effective.
+I am a beginner of C# and .NET, I have developed a BHO for IE9 to add "super drag and go". This project is based on an example in "All-in-one platform", and the code and bin files is here: http://code.google.com/p/cs-drag4ie9/.
+Now the BHO works well but it still has something not good:
 
-Now I have not better ideas.
+1. To make sure the handler works in some unusual cases (such as on loading a page, after refreshing, refreshing before loading end), I have to write DownloadBegin like this:
+
+void ieInstance_DownloadBegin()
+        {
+            if (rootElementEvents != null)
+            {
+                SetDragHandler();
+            }
+        } 
+
+void SetDragHandler()
+        {
+
+            //To avoid set handler repeatedly, remove previous handler.
+
+           .........(something else)...........
+
+            rootElementEvents.ondragend -=
+                new HTMLElementEvents2_ondragendEventHandler(
+                    Events_Ondragend);
+            rootElementEvents.ondragend +=
+                new HTMLElementEvents2_ondragendEventHandler(
+                     Events_Ondragend);
+        }
+
+I think it is not good because it may reduce the loading speed, but I cannot find a better way as it is hard to check the "refresh button clicking" event.
+
+2. I also find a tab opened directly (I mean some cases like: click a url to open a new tab, click a url with middle button or right button) can not be set the ElementEvents, so I have to add a piece of code like this into "NavigateComplete" (as "BeforeNavigate2" never works in IE9, it's bad): 
+
+if (pDisp == ieInstance)
+            {
+                if (Refreshed == false)
+                {
+                    if (URL.ToString().StartsWith("http"))
+                    {
+                        ieInstance.Navigate2(URL.ToString());
+                    }
+                    Refreshed = true;
+                }
+            }
+After re-navigating, the handler works well. But similar as problem 1, it may reduce the speed, too.
+
+Shall you give me some advices to improve these problems? Many thanks for your help.
