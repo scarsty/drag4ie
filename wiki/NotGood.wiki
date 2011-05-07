@@ -1,0 +1,5 @@
+I have to set handler many times  in "DownloadBegin" to make sure the handler is effective, whenever navigating, refreshing, refreshing when navigating (hope you can understand what I mean) and so on.
+
+A new tab have to be re-navigated to let the handler effective.
+
+Now I have not better ideas.
