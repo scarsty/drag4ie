@@ -1,5 +1,6 @@
-Super Drag and Go (Beta) for IE9
-超级拖拽(beta) for IE 9
+=Super Drag and Go (Beta) for IE9=
+
+==超级拖拽(beta) for IE 9 （中文介绍）==
 
 作者: s.weyl
 版本: 0.9.2.3 (beta)
@@ -7,11 +8,11 @@ Super Drag and Go (Beta) for IE9
 如果你知道超级拖拽是什么，那么你可能需要这个插件。
 你可以用电子邮件向我查询或者索要源码（scarsty@gmail.com）。
 
-1. 如何安装和卸载
+*1. 如何安装和卸载*
 
 首先需要你的系统中安装了.NET Framework 4.0，可以在 http://www.microsoft.com/downloads/en/details.aspx?familyid=9cfb2d51-5ff4-4491-b0e5-b386f32c0992下载。
 
-手动安装（推荐）：
+_手动安装（推荐）：_
 
 下载压缩包，解压到任意目录，以管理员身份运行附件中的“命令行”，切换到文件所在的目录，运行“install”。
 卸载的过程是类似的，只是要运行“uninstall”。
@@ -20,34 +21,29 @@ Super Drag and Go (Beta) for IE9
 
 “CustomDrag.exe”这个程序可以对拖拽进行一些设置，还可以将自身添加到IE的工具菜单中。这些设置在卸载时都会被删除。
 
-自动安装：
+_自动安装：_
 
 使用MSI文件可以自动安装，但是只有针对32位IE的安装文件。
 这时需要使用控制面板卸载。
 
 
-2. 设置搜索字串:
+*2. 设置搜索字串:*
 
 用你喜欢的搜索引擎搜索“{0}”，然后把地址栏中的内容复制下来即可。
 需要注意的是，如果这个字串中没有出现“{0}”，而是“%7B0%7D”，则需要将“%7B0%7D”替换为“{0}”。
 
 
-3. 参考文献：
+*3. 参考文献：*
 
 http://www.cnblogs.com/TianFang/archive/2011/03/12/1982100.html
+
 http://www.codeproject.com/KB/cs/Issuewithbandobjects.aspx
+
 MSDN.
+
 以及其他。
 
-发布页：
-http://code.google.com/p/cs-drag4ie9/
-
-文件下载：
-http://code.google.com/p/cs-drag4ie9/downloads/list
-
-
-Super Drag and Go (Beta) for IE9
-超级拖拽(beta) for IE 9
+== Introduction in English ==
 
 Author: s.weyl
 Version: 0.9.2.3 (beta)
@@ -56,11 +52,11 @@ Version: 0.9.2.3 (beta)
 If you know what "Super Drag and Go" is, you might need it. For more information or source code, please contact with me by e-mail (scarsty@gmail.com).
 
 
-1. How to install and uninstall:
+*1. How to install and uninstall:*
 
 First of all, please make sure you have .NET Framework 4.0. You can get it from http://www.microsoft.com/downloads/en/details.aspx?familyid=9cfb2d51-5ff4-4491-b0e5-b386f32c0992.
 
-Manually:
+_Manually:_
 
 To install, you have to decompress the ZIP file into any directory, then open "Command Window" as Administrator, and switch to this directory, run "install".
 
@@ -70,24 +66,27 @@ If you want to use it in 64 bit IE, please run "install 64" and "uninstall 64".
 
 You can also use "CustomDrag.exe" to modify the behavior of this BHO, or add a link of this program into IE tools menu. All settings will be deleted when uninstall.
 
-Automatically:
+_Automatically:_
 
 Also you can use the msi file to install it automatically, but now it only supports 32 bit IE. Then you have to use "Control Panel" to uninstall it.
 
 Hope you can like it.
 
 
-2. The "Search string":
+*2. The "Search string":*
 
 Please search "{0}" in the engineering you prefer, then just copy the string in the address bar.
 
 But you have to note, if there are not "{0}" in the string, but "%7B0%7D" instead, please change "%7B0%7D" to "{0}", then use it as "Search string".
 
-3. References:
+*3. References:*
 
 http://www.cnblogs.com/TianFang/archive/2011/03/12/1982100.html
+
 http://www.codeproject.com/KB/cs/Issuewithbandobjects.aspx
+
 Contents on MSDN.
+
 And so on, many thanks to them.
 
 Seek setup files in:
