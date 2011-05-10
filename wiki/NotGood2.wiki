@@ -5,13 +5,14 @@ To make sure the handler is effective after refreshing, you have to set handler 
 You cannot only set handler, but also read the elements in document once again.
 
 The code should like this:
+
 {{{
         void ieInstance_DownloadComplete()
         {
             SetDragHandler();
         }
 
-void SetDragHandler()
+        void SetDragHandler()
         {
             //To avoid set handler repeatedly, remove previous handler.
             document = ieInstance.Document as IHTMLDocument3;
