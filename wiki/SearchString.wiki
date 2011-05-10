@@ -1,3 +1,3 @@
 SearchString:
 
-Please search "{0}" in the 
+Please search "{0}", then change "" to "", use the
