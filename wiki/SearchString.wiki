@@ -1,3 +1,4 @@
 SearchString:
 
-Please search "{0}", then change "" to "", use the
+Please search "{0}", copy the string in the address bar.
+Then change "%7B0%7D" to "{0}", use the modified string as the search string.
