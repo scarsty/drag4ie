@@ -1,0 +1,33 @@
+There are some mistakes in "NotGood".
+
+To make sure the handler is effective after refreshing, you have to set handler again in "DownloadComplete", not "DownloadBegin". As the first "DownloadBegin" might has nothing.
+
+You cannot only set handler, but also read the elements in document once again.
+
+The code should like this:
+{{{
+        void ieInstance_DownloadComplete()
+        {
+            SetDragHandler();
+        }
+
+void SetDragHandler()
+        {
+            //To avoid set handler repeatedly, remove previous handler.
+            document = ieInstance.Document as IHTMLDocument3;
+            rootElementEvents = document.documentElement as HTMLElementEvents2_Event;
+            rootElementEvents.ondragstart -=
+                new HTMLElementEvents2_ondragstartEventHandler(
+                    Events_Ondragstart);
+            rootElementEvents.ondragstart +=
+                new HTMLElementEvents2_ondragstartEventHandler(
+                    Events_Ondragstart);
+            rootElementEvents.ondragover += (e) => false;
+            rootElementEvents.ondragend -=
+                new HTMLElementEvents2_ondragendEventHandler(
+                    Events_Ondragend);
+            rootElementEvents.ondragend +=
+                new HTMLElementEvents2_ondragendEventHandler(
+                     Events_Ondragend);
+        } 
+}}}
