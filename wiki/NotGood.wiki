@@ -4,8 +4,8 @@ I am a beginner of C# and .NET, I have developed a BHO for IE9 to add "super dra
 Now the BHO works well but it still has something not good:
 
 1. To make sure the handler works in some unusual cases (such as on loading a page, after refreshing, refreshing before loading end), I have to write DownloadBegin like this:
-
-void ieInstance_DownloadBegin()
+{{{
+        void ieInstance_DownloadBegin()
         {
             if (rootElementEvents != null)
             {
@@ -13,7 +13,7 @@ void ieInstance_DownloadBegin()
             }
         } 
 
-void SetDragHandler()
+        void SetDragHandler()
         {
 
             //To avoid set handler repeatedly, remove previous handler.
@@ -27,12 +27,13 @@ void SetDragHandler()
                 new HTMLElementEvents2_ondragendEventHandler(
                      Events_Ondragend);
         }
+}}}
 
 I think it is not good because it may reduce the loading speed, but I cannot find a better way as it is hard to check the "refresh button clicking" event.
 
 2. I also find a tab opened directly (I mean some cases like: click a url to open a new tab, click a url with middle button or right button) can not be set the ElementEvents, so I have to add a piece of code like this into "NavigateComplete" (as "BeforeNavigate2" never works in IE9, it's bad): 
-
-if (pDisp == ieInstance)
+{{{
+            if (pDisp == ieInstance)
             {
                 if (Refreshed == false)
                 {
@@ -43,6 +44,7 @@ if (pDisp == ieInstance)
                     Refreshed = true;
                 }
             }
+}}}
 After re-navigating, the handler works well. But similar as problem 1, it may reduce the speed, too.
 
 Shall you give me some advices to improve these problems? Many thanks for your help.
