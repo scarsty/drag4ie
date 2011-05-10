@@ -1,4 +1,4 @@
-﻿/****************************** Module Header ******************************\
+/****************************** Module Header ******************************\
 * Module Name:  BHOIEContextMenu.cs
 * Project:	    CSBrowserHelperObject
 * Copyright (c) Microsoft Corporation.
@@ -42,6 +42,7 @@ using System.Text;
 
 
 
+
 namespace BHOForIE9
 {
     /// <summary>
@@ -72,7 +73,7 @@ namespace BHOForIE9
         public const string ConfigKey = "Software\\s.weyl\\DragForIE9";
 
         public int NewTabGround;
-        public string SearchString;        
+        public string SearchString;
 
         #endregion
 
@@ -178,6 +179,9 @@ namespace BHOForIE9
                 ieInstance.DownloadComplete +=
                     new DWebBrowserEvents2_DownloadCompleteEventHandler(
                         ieInstance_DownloadComplete);
+                /*ieInstance.DocumentComplete +=
+                    new DWebBrowserEvents2_DocumentCompleteEventHandler(
+                        ieInstance_DocumentComplete);*/
 
                 RegistryKey key = Registry.CurrentUser.OpenSubKey(ConfigKey, false);
                 if (key != null)
@@ -191,6 +195,7 @@ namespace BHOForIE9
                     SearchString = "http://www.google.com.hk/search?hl=zh-CN&q={0}";
                 }
                 key.Close();
+                //document = ieInstance.Document as HTMLDocument;
             }
 
         }
@@ -222,22 +227,27 @@ namespace BHOForIE9
         /// By default, this object is the same as the ieInstance, but if the page 
         /// contains many frames, each frame has its own document.
         /// </param>
+        //public DateTime timer;
         void ieInstance_NavigateComplete2(object pDisp, ref object URL)
         {
+            //MessageBox.Show(URL.ToString()); 
             if (pDisp == ieInstance)
             {
+                //MessageBox.Show(URL.ToString());
                 if (Refreshed == false)
                 {
-                    if (URL.ToString().StartsWith("http"))
-                    {
-                        ieInstance.Navigate2(URL.ToString());
-                    }
                     Refreshed = true;
+                    string s = URL.ToString();
+                    if (s.StartsWith("http"))
+                    {
+                        //timer = DateTime.Now;
+                        ieInstance.Navigate2(s);
+                    }
                 }
                 else
                 {
-                    document = ieInstance.Document as IHTMLDocument3;
-                    rootElementEvents = document.documentElement as HTMLElementEvents2_Event;
+                    //TimeSpan t = DateTime.Now - timer;
+                    //MessageBox.Show(t.TotalMilliseconds.ToString());
                     SetDragHandler();
                 }
             }
@@ -246,28 +256,19 @@ namespace BHOForIE9
 
         void ieInstance_DocumentComplete(object pDisp, ref object URL)
         {
-
+            //MessageBox.Show(URL.ToString()); 
         }
 
 
         void ieInstance_DownloadBegin()
         {
-            if (rootElementEvents != null)
-            {
-                SetDragHandler();
-            }
-            else
-            {
-                document = ieInstance.Document as IHTMLDocument3;
-                rootElementEvents = document.documentElement as HTMLElementEvents2_Event;
-                SetDragHandler();
-            }
+            //SetDragHandler();
         }
 
 
         void ieInstance_DownloadComplete()
         {
-
+            SetDragHandler();
         }
 
         #endregion
@@ -281,27 +282,42 @@ namespace BHOForIE9
 
         void SetDragHandler()
         {
-
             //To avoid set handler repeatedly, remove previous handler.
+            //DateTime tm1 = DateTime.Now;
+            document = ieInstance.Document as IHTMLDocument3;
+            rootElementEvents = document.documentElement as HTMLElementEvents2_Event;
+
             rootElementEvents.ondragstart -=
                 new HTMLElementEvents2_ondragstartEventHandler(
                     Events_Ondragstart);
             rootElementEvents.ondragstart +=
                 new HTMLElementEvents2_ondragstartEventHandler(
                     Events_Ondragstart);
-            rootElementEvents.ondragover += (e) => false;
+            rootElementEvents.ondragover -= 
+                new HTMLElementEvents2_ondragoverEventHandler(
+                    Events_Ondragover);
+            rootElementEvents.ondragover +=
+                new HTMLElementEvents2_ondragoverEventHandler(
+                    Events_Ondragover); 
             rootElementEvents.ondragend -=
                 new HTMLElementEvents2_ondragendEventHandler(
                     Events_Ondragend);
             rootElementEvents.ondragend +=
                 new HTMLElementEvents2_ondragendEventHandler(
                      Events_Ondragend);
+            //TimeSpan s = DateTime.Now - tm1;
+            //MessageBox.Show(s.TotalMilliseconds.ToString());
         }
 
         bool Events_Ondragstart(IHTMLEventObj e)
         {
             preY = e.clientY;
             return true;
+        }
+
+        bool Events_Ondragover(IHTMLEventObj e)
+        {
+            return false;
         }
 
         void Events_Ondragend(IHTMLEventObj e)
@@ -349,10 +365,11 @@ namespace BHOForIE9
                 }
                 else
                 {
-                    ieInstance.Navigate2(string.Format(SearchString, text), n);
+                    ieInstance.Navigate2(string.Format(SearchString, System.Web.HttpUtility.UrlEncode(text)), n);
                 }
                 return;
             }
+            return;
         }
 
         #endregion
