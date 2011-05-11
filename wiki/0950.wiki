@@ -31,3 +31,7 @@ if (rootElementEvents != document.documentElement as HTMLElementEvents2_Event)
 A new tab opened by clicking the URL (or clicking a URL with middle button, or right button then select "open in new tab"), cannot be set event handler in 'NavigateComplete2', but "DownloadComplete" is OK.
 
 It is not right in "NotGood".
+
+=== Conclusions ===
+
+We can drop re-navigating, cut down the times of handler setting. 
