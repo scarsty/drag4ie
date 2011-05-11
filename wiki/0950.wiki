@@ -1,13 +1,29 @@
 # What's new in 0.9.5.0. Very surprised.
 
-= Introduction =
+=== How to tell the clicking of "Refresh button" ===
 
-Add your content here.
+It is not a good experience.
+
+In the versions of 0.9.2.x, the event handler was set many times at each "DownloadComplete". But in fact once is enough, too many times will reduce the loading speed indeed.
+
+The reason is that we cannot catch the clicking of "Refresh button", I have no idea that why Microsoft never leave this interface, it is very bad.
+
+Unexpectedly, I found this code is helpful:
+
+{{{
+//in NavigateComplete2 or other place:
+document = ieInstance.Document as IHTMLDocument3;
+rootElementEvents = document.documentElement as HTMLElementEvents2_Event;
+}}}
+
+Then when the refresh button is clicked:
+
+{{{
+//place this code in DownloadBegin
+if (rootElementEvents != document.documentElement as HTMLElementEvents2_Event)
+{
+        MessageBox.Show("You might click the refresh button");
+}
+}}}
 
 
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
