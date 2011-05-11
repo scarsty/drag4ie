@@ -22,8 +22,12 @@ Then when the refresh button is clicked:
 //place this code in DownloadBegin
 if (rootElementEvents != document.documentElement as HTMLElementEvents2_Event)
 {
-        MessageBox.Show("You might click the refresh button");
+    MessageBox.Show("You might click the refresh button just now");
 }
 }}}
 
+=== The new tab and event handler ===
 
+A new tab opened by clicking the URL (or clicking a URL with middle button, or right button then select "open in new tab"), cannot be set event handler in 'NavigateComplete2', but "DownloadComplete" is OK.
+
+It is not right in "NotGood".
