@@ -3,7 +3,7 @@
 ==超级拖拽(beta) for IE 9 （中文介绍）==
 
 作者: s.weyl
-版本: 0.9.2.3 (beta)
+版本: 随时更新，请看主页
 
 如果你知道超级拖拽是什么，那么你可能需要这个插件。
 你可以用电子邮件向我查询或者索要源码（scarsty@gmail.com）。
@@ -46,7 +46,7 @@ MSDN.
 == Introduction in English ==
 
 Author: s.weyl
-Version: 0.9.2.3 (beta)
+Version: please see home page for the newest (beta)
 
 
 If you know what "Super Drag and Go" is, you might need it. For more information or source code, please contact with me by e-mail (scarsty@gmail.com).
