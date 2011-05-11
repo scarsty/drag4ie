@@ -28,7 +28,7 @@
 
 /*
  * This code is based on "CSBrowserHelperObject" publish by Microsoft Corporation.
- * The origianl words are kept with out any modifications as above. 
+ * The origianl words are kept without any modifications as above. 
  */
 
 
@@ -64,7 +64,7 @@ namespace BHOForIE9
         public IHTMLDocument3 document;
         public HTMLElementEvents2_Event rootElementEvents = null;
         public int preY;
-        public bool Refreshed = false;
+        public bool Command = false;
 
         // To register a BHO, a new key should be created under this key.
         private const string BHORegistryKey =
@@ -230,26 +230,9 @@ namespace BHOForIE9
         //public DateTime timer;
         void ieInstance_NavigateComplete2(object pDisp, ref object URL)
         {
-            //MessageBox.Show(URL.ToString()); 
             if (pDisp == ieInstance)
             {
-                //MessageBox.Show(URL.ToString());
-                if (Refreshed == false)
-                {
-                    Refreshed = true;
-                    string s = URL.ToString();
-                    if (s.StartsWith("http"))
-                    {
-                        //timer = DateTime.Now;
-                        ieInstance.Navigate2(s);
-                    }
-                }
-                else
-                {
-                    //TimeSpan t = DateTime.Now - timer;
-                    //MessageBox.Show(t.TotalMilliseconds.ToString());
-                    SetDragHandler();
-                }
+                SetDragHandler();
             }
         }
 
@@ -263,12 +246,22 @@ namespace BHOForIE9
         void ieInstance_DownloadBegin()
         {
             //SetDragHandler();
+            if (rootElementEvents != document.documentElement as HTMLElementEvents2_Event)
+            {
+                //MessageBox.Show("might new");
+                Command = true;
+                //SetDragHandler();
+            }
         }
 
 
         void ieInstance_DownloadComplete()
         {
-            SetDragHandler();
+            if (Command)
+            {
+                SetDragHandler();
+                Command = false;
+            }
         }
 
         #endregion
@@ -284,27 +277,34 @@ namespace BHOForIE9
         {
             //To avoid set handler repeatedly, remove previous handler.
             //DateTime tm1 = DateTime.Now;
-            document = ieInstance.Document as IHTMLDocument3;
-            rootElementEvents = document.documentElement as HTMLElementEvents2_Event;
+            try
+            {
+                document = ieInstance.Document as IHTMLDocument3;
+                rootElementEvents = document.documentElement as HTMLElementEvents2_Event;
 
-            rootElementEvents.ondragstart -=
-                new HTMLElementEvents2_ondragstartEventHandler(
-                    Events_Ondragstart);
-            rootElementEvents.ondragstart +=
-                new HTMLElementEvents2_ondragstartEventHandler(
-                    Events_Ondragstart);
-            rootElementEvents.ondragover -= 
-                new HTMLElementEvents2_ondragoverEventHandler(
-                    Events_Ondragover);
-            rootElementEvents.ondragover +=
-                new HTMLElementEvents2_ondragoverEventHandler(
-                    Events_Ondragover); 
-            rootElementEvents.ondragend -=
-                new HTMLElementEvents2_ondragendEventHandler(
-                    Events_Ondragend);
-            rootElementEvents.ondragend +=
-                new HTMLElementEvents2_ondragendEventHandler(
-                     Events_Ondragend);
+                rootElementEvents.ondragstart -=
+                    new HTMLElementEvents2_ondragstartEventHandler(
+                        Events_Ondragstart);
+                rootElementEvents.ondragstart +=
+                    new HTMLElementEvents2_ondragstartEventHandler(
+                        Events_Ondragstart);
+                rootElementEvents.ondragover -=
+                    new HTMLElementEvents2_ondragoverEventHandler(
+                        Events_Ondragover);
+                rootElementEvents.ondragover +=
+                    new HTMLElementEvents2_ondragoverEventHandler(
+                        Events_Ondragover);
+                rootElementEvents.ondragend -=
+                    new HTMLElementEvents2_ondragendEventHandler(
+                        Events_Ondragend);
+                rootElementEvents.ondragend +=
+                    new HTMLElementEvents2_ondragendEventHandler(
+                         Events_Ondragend);
+            }
+            catch
+            {
+                //MessageBox.Show("set failed");
+            }
             //TimeSpan s = DateTime.Now - tm1;
             //MessageBox.Show(s.TotalMilliseconds.ToString());
         }
@@ -344,6 +344,7 @@ namespace BHOForIE9
                         n = BrowserNavConstants.navOpenInBackgroundTab;
                     break;
             }
+            //n = BrowserNavConstants.navOpenNewForegroundTab;
 
             var eventObj = e as IHTMLEventObj2;
 
