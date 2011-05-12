@@ -1,6 +1,7 @@
 #What's new in 0.9.5.0. Very surprised.
 
-=== How to tell the clicking of "Refresh button" ===
+
+=== How to detect the clicking of "Refresh button" ===
 
 It is not a good experience.
 
@@ -8,16 +9,13 @@ In the versions of 0.9.2.x, the event handler was set many times at each "Downlo
 
 The reason is that we cannot catch the clicking of "Refresh button", I have no idea that why Microsoft never leave this interface, it is very bad.
 
-Unexpectedly, I found this code is helpful:
-
+Unexpectedly, I found this code is helpful. First you have to link the HTMLElementEvent to the document:
 {{{
 //in NavigateComplete2 or other place:
 document = ieInstance.Document as IHTMLDocument3;
 rootElementEvents = document.documentElement as HTMLElementEvents2_Event;
 }}}
-
-Then when the refresh button is clicked:
-
+Then when the refresh button is clicked can be checked in DownloadBegin:
 {{{
 //place this code in DownloadBegin
 if (rootElementEvents != document.documentElement as HTMLElementEvents2_Event)
