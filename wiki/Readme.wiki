@@ -1,3 +1,4 @@
+#labels Phase-Deploy
 =Super Drag and Go (Beta) for IE9=
 
 ==超级拖拽(beta) for IE 9 （中文介绍）==
