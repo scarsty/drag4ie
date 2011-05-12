@@ -1,1 +1,2 @@
+#labels Deprecated
 http://msdn.microsoft.com/en-us/library/aa752084(v=vs.85).aspx
