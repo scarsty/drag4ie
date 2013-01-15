@@ -1,4 +1,4 @@
-/****************************** Module Header ******************************\
+﻿/****************************** Module Header ******************************\
 * Module Name:  BHOIEContextMenu.cs
 * Project:	    CSBrowserHelperObject
 * Copyright (c) Microsoft Corporation.
@@ -65,6 +65,8 @@ namespace BHOForIE9
         public HTMLElementEvents2_Event rootElementEvents = null;
         public int preY;
         public bool Command = false;
+        IHTMLEventObj2 eventObj;
+        string url, text;
 
         // To register a BHO, a new key should be created under this key.
         private const string BHORegistryKey =
@@ -312,6 +314,13 @@ namespace BHOForIE9
         bool Events_Ondragstart(IHTMLEventObj e)
         {
             preY = e.clientY;
+
+
+            eventObj = e as IHTMLEventObj2;
+            url = (object)eventObj.dataTransfer.getData("URL") as string;
+            text = (object)eventObj.dataTransfer.getData("TEXT") as string;
+            //MessageBox.Show(url.ToString());
+
             return true;
         }
 
@@ -346,10 +355,11 @@ namespace BHOForIE9
             }
             //n = BrowserNavConstants.navOpenNewForegroundTab;
 
-            var eventObj = e as IHTMLEventObj2;
+            //var eventObj = e as IHTMLEventObj2;
 
             //When drag a url.
-            var url = (object)eventObj.dataTransfer.getData("URL") as string;
+            //var url = (object)eventObj.dataTransfer.getData("URL") as string;
+            //MessageBox.Show(url.ToString());
             if (!string.IsNullOrEmpty(url))
             {
                 ieInstance.Navigate2(url, n);
@@ -357,7 +367,7 @@ namespace BHOForIE9
             }
 
             //When drag a text.
-            var text = (object)eventObj.dataTransfer.getData("TEXT") as string;
+            //var text = (object)eventObj.dataTransfer.getData("TEXT") as string;
             if (!string.IsNullOrEmpty(text))
             {
                 if (text.StartsWith("http://") || text.StartsWith("https://"))
