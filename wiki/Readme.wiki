@@ -15,17 +15,11 @@
 
 _手动安装（推荐）：_
 
-下载压缩包，解压到任意目录，以管理员身份运行附件中的“命令行”，切换到文件所在的目录，运行“install”。
-卸载的过程是类似的，只是要运行“uninstall”。
+下载压缩包，解压到任意目录，以管理员身份运行“install.cmd”。如果要在64位IE中使用，运行“install64.cmd"。
 
-如果要在64位IE中使用，运行“install 64"和"uninstall 64”。
+卸载时运行“uninstall.cmd”，这会将32位和64位版本同时移除。
 
 “CustomDrag.exe”这个程序可以对拖拽进行一些设置，还可以将自身添加到IE的工具菜单中。这些设置在卸载时都会被删除。
-
-_自动安装：_
-
-使用MSI文件可以自动安装，但是只有针对32位IE的安装文件。
-这时需要使用控制面板卸载。
 
 
 *2. 设置搜索字串:*
@@ -59,17 +53,11 @@ First of all, please make sure you have .NET Framework 4.0. You can get it from 
 
 _Manually:_
 
-To install, you have to decompress the ZIP file into any directory, then open "Command Window" as Administrator, and switch to this directory, run "install".
+To install, you have to decompress the ZIP file into any directory, then run "install.cmd" or "install64.cmd" (for 64-bit IE) as Administrator.
 
-Similarly, to uninstall, just do the same but run "uninstall".
-
-If you want to use it in 64 bit IE, please run "install 64" and "uninstall 64".
+To uninstall, run "uninstall.cmd" which will remove both 32-bit and 64-bit versions.
 
 You can also use "CustomDrag.exe" to modify the behavior of this BHO, or add a link of this program into IE tools menu. All settings will be deleted when uninstall.
-
-_Automatically:_
-
-Also you can use the msi file to install it automatically, but now it only supports 32 bit IE. Then you have to use "Control Panel" to uninstall it.
 
 Hope you can like it.
 
