@@ -106,7 +106,12 @@ Seek setup files in: <http://code.google.com/p/cs-drag4ie9/downloads/list>
 这个问题的一般结论是，在载入多个框架的网页时，每个框架都会引发自己的NavigateComplete2和DocumentComplete事件，判断该事件是否为主框架的对应事件可以用以下代码： 
 ```c#
 void ieInstance_NavigateComplete2(object pDisp, ref object URL) 
-{ if (pDisp == ieInstance) { //Do something. } } 
+{ 
+    if (pDisp == ieInstance) 
+    { 
+        //Do something. 
+    } 
+} 
 ```
 其中ieInstance为public对象，而SetSite中将其指定： 
 ```c#
@@ -146,7 +151,9 @@ rootElementEvents = document.documentElement as HTMLElementEvents2_Event;
 在DownloadBegin中添加如下代码：
 ```c#
 if (rootElementEvents != document.documentElement as HTMLElementEvents2_Event) 
-{ //This might be refreshing, if no navigations. } 
+{
+    //This might be refreshing, if no navigations. 
+} 
 ```
 该if语句就是判断rootElementEvents是否跟ieInstance挂钩，刷新之后既然不挂钩了，那么该判断为真时，就可以认为是用户刷新了网页。而为了使该判断仍然可以使用，之后需要在立刻在下一个DownloadComplete重新将二者挂钩。
 
@@ -163,7 +170,7 @@ if (rootElementEvents != document.documentElement as HTMLElementEvents2_Event)
 如果实在太难以区分，那么就干脆不要区分而采用其他的手段。在设定事件之前，首先清除前一个事件，即：
 
 ```c#
-rootElementEvents.ondragend -= new HTMLElementEvents2_ondragendEventHandler( Events_Ondragend);
-rootElementEvents.ondragend += new HTMLElementEvents2_ondragendEventHandler( Events_Ondragend); 
+rootElementEvents.ondragend -= new HTMLElementEvents2_ondragendEventHandler(Events_Ondragend);
+rootElementEvents.ondragend += new HTMLElementEvents2_ondragendEventHandler(Events_Ondragend); 
 ```
 在设定之前首先清除，即可以保证事件只被设定一次，rootElementEvents应该是一个public的全局变量，而不是单属于这个函数。因为-=操作在相关事件没有设定的时候是不做操作，所以首次设定也不会有错误发生，该方法被证实是比较有效的。
