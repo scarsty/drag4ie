@@ -88,7 +88,7 @@ namespace CSBHODragForIE9
         /// Internet Explorer 7. Maintain state for dynamic navigation based on the filter string entered in the search band text box (wordwheel). Restore the wordwheel text when the navigation completes.
         /// </summary>
         navKeepWordWheelText = 0x2000
-    } 
+    }
 
     public class HTMLDocumentEventHelper
     {
@@ -104,14 +104,12 @@ namespace CSBHODragForIE9
             var rootElementEvents = document.documentElement as HTMLElementEvents_Event;
             //rootElementEvents.ondragstart += ()=>false;
             rootElementEvents.ondragover += () => false;
-            rootElementEvents.ondrop += () => { SuperDragDrop(); return false; };            
-
+            rootElementEvents.ondrop += () => { SuperDragDrop(); return false; };
         }
 
         public void SuperDragDrop()
         {
             var eventObj = document.parentWindow.@event as IHTMLEventObj2;
-            
             //拖拽的是链接，在新窗口中打开链接
             var url = (object)eventObj.dataTransfer.getData("URL") as string;
             //MessageBox.Show(url);
@@ -119,7 +117,6 @@ namespace CSBHODragForIE9
             {
                 //MessageBox.Show(url);                 
                 ieInstance.Navigate2(url, BrowserNavConstants.navOpenInBackgroundTab);
-                
                 return;
             }
 
@@ -141,36 +138,33 @@ namespace CSBHODragForIE9
         }
 
         public event HtmlEvent ondragstart
-        {            
-            
+        {
+
             add
             {
-                
-
                 object existingHandler = document.ondragstart;
                 HTMLEventHandler handler = existingHandler as HTMLEventHandler;
-
                 // Set the handler to the oncontextmenu event.
                 //dispDoc.ondragstart = handler;
-
-                if (handler != null) 
+                if (handler != null)
+                {
                     handler.eventHandler += value;
+                }
             }
             remove
             {
                 //MessageBox.Show("remove");
                 DispHTMLDocument dispDoc = this.document as DispHTMLDocument;
                 object existingHandler = dispDoc.ondragstart;
-
-                HTMLEventHandler handler = existingHandler is HTMLEventHandler ?
-                    existingHandler as HTMLEventHandler : null;
-
+                HTMLEventHandler handler = existingHandler is HTMLEventHandler ? existingHandler as HTMLEventHandler : null;
                 if (handler != null)
+                {
                     handler.eventHandler -= value;
+                }
             }
         }
 
-        
+
     }
 
 }

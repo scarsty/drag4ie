@@ -51,7 +51,7 @@ namespace BHOForIE9
     /// </summary>
     [ComVisible(true),
     ClassInterface(ClassInterfaceType.None),
-   Guid("3640b4a2-20aa-4f05-a575-b2ea1d7452e1")]
+    Guid("3640b4a2-20aa-4f05-a575-b2ea1d7452e1")]
 
     public class SuperDrag :
         IObjectWithSite
@@ -285,23 +285,17 @@ namespace BHOForIE9
                 rootElementEvents = document.documentElement as HTMLElementEvents2_Event;
 
                 rootElementEvents.ondragstart -=
-                    new HTMLElementEvents2_ondragstartEventHandler(
-                        Events_Ondragstart);
+                    new HTMLElementEvents2_ondragstartEventHandler(Events_Ondragstart);
                 rootElementEvents.ondragstart +=
-                    new HTMLElementEvents2_ondragstartEventHandler(
-                        Events_Ondragstart);
+                    new HTMLElementEvents2_ondragstartEventHandler(Events_Ondragstart);
                 rootElementEvents.ondragover -=
-                    new HTMLElementEvents2_ondragoverEventHandler(
-                        Events_Ondragover);
+                    new HTMLElementEvents2_ondragoverEventHandler(Events_Ondragover);
                 rootElementEvents.ondragover +=
-                    new HTMLElementEvents2_ondragoverEventHandler(
-                        Events_Ondragover);
+                    new HTMLElementEvents2_ondragoverEventHandler(Events_Ondragover);
                 rootElementEvents.ondragend -=
-                    new HTMLElementEvents2_ondragendEventHandler(
-                        Events_Ondragend);
+                    new HTMLElementEvents2_ondragendEventHandler(Events_Ondragend);
                 rootElementEvents.ondragend +=
-                    new HTMLElementEvents2_ondragendEventHandler(
-                         Events_Ondragend);
+                    new HTMLElementEvents2_ondragendEventHandler(Events_Ondragend);
             }
             catch
             {
