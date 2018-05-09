@@ -1,7 +1,0 @@
-C:\Users\sty\Desktop\Debug\CSBrowserHelperObject.dll
-C:\Users\sty\Desktop\Debug\CSBrowserHelperObject.pdb
-C:\Users\sty\Desktop\CSBrowserHelperObject\obj\x86\Debug\ResolveAssemblyReference.cache
-C:\Users\sty\Desktop\CSBrowserHelperObject\obj\x86\Debug\Interop.SHDocVw.dll
-C:\Users\sty\Desktop\CSBrowserHelperObject\obj\x86\Debug\CSBrowserHelperObject.csproj.ResolveComReference.cache
-C:\Users\sty\Desktop\CSBrowserHelperObject\obj\x86\Debug\CSBrowserHelperObject.dll
-C:\Users\sty\Desktop\CSBrowserHelperObject\obj\x86\Debug\CSBrowserHelperObject.pdb

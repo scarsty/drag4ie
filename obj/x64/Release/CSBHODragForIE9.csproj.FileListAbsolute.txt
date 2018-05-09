@@ -1,7 +1,0 @@
-D:\Documents\Visual Studio 2010\Projects\Release\CSBHODragForIE9.dll
-D:\Documents\Visual Studio 2010\Projects\Release\CSBHODragForIE9.pdb
-D:\Documents\Visual Studio 2010\Projects\CSBHODragForIE9\obj\x64\Release\ResolveAssemblyReference.cache
-D:\Documents\Visual Studio 2010\Projects\CSBHODragForIE9\obj\x64\Release\Interop.SHDocVw.dll
-D:\Documents\Visual Studio 2010\Projects\CSBHODragForIE9\obj\x64\Release\CSBHODragForIE9.csproj.ResolveComReference.cache
-D:\Documents\Visual Studio 2010\Projects\CSBHODragForIE9\obj\x64\Release\CSBHODragForIE9.dll
-D:\Documents\Visual Studio 2010\Projects\CSBHODragForIE9\obj\x64\Release\CSBHODragForIE9.pdb
